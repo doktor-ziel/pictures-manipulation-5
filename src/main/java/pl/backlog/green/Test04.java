@@ -2,6 +2,7 @@ package pl.backlog.green;
 
 import picocli.CommandLine;
 
+import java.nio.file.Path;
 import java.util.concurrent.Callable;
 
 @CommandLine.Command(
@@ -20,8 +21,8 @@ public class Test04 implements Callable<Integer> {
     @CommandLine.Option(names = "-c", required = true, paramLabel = "INT", description = "second option with value, mandatory")
     String value02;
 
-    @CommandLine.Option(names = {"-p", "--path"}, paramLabel = "PATH", description = "second option with value, not mandatory")
-    String path;
+    @CommandLine.Option(names = {"-p", "--path"}, required = true, paramLabel = "PATH", description = "second option with value, not mandatory")
+    Path path;
 
 
 
@@ -35,7 +36,7 @@ public class Test04 implements Callable<Integer> {
         }
         System.out.println("Wartość 'b': " + value01);
         System.out.println("Wartość 'c': " + value02);
-        System.out.println("Wartość 'p': " + path);
+        System.out.println("Wartość 'p': " + path.toString());
         return 0;
     }
 
