@@ -20,7 +20,7 @@ public class Test05 implements Callable<Integer> {
     @CommandLine.Option(names = "-c", paramLabel = "INT", description = "second option with value, not mandatory")
     String value02;
 
-    @CommandLine.Parameters(index = "0", description = "argument of program")
+    @CommandLine.Parameters(index = "0", paramLabel = "FILE", description = "argument of program")
     String value03;
 
     @Override
