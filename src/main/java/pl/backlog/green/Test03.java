@@ -2,6 +2,7 @@ package pl.backlog.green;
 
 import picocli.CommandLine;
 
+import java.nio.file.Path;
 import java.util.concurrent.Callable;
 
 @CommandLine.Command(
@@ -21,10 +22,7 @@ public class Test03 implements Callable<Integer> {
     String value02;
 
     @CommandLine.Option(names = {"-p", "--path"}, paramLabel = "PATH", description = "second option with value, not mandatory")
-    String path;
-
-
-
+    Path path;
 
     @Override
     public Integer call() {

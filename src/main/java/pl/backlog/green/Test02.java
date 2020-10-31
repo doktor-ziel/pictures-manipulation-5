@@ -19,8 +19,7 @@ public class Test02 implements Callable<Integer> {
     String value01;
 
     @CommandLine.Option(names = "-c", paramLabel = "INT", description = "second option with value, not mandatory")
-    String value02;
-
+    int value02;
 
     @Override
     public Integer call() {

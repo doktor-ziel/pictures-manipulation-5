@@ -24,9 +24,6 @@ public class Test04 implements Callable<Integer> {
     @CommandLine.Option(names = {"-p", "--path"}, required = true, paramLabel = "PATH", description = "second option with value, not mandatory")
     Path path;
 
-
-
-
     @Override
     public Integer call() {
         if (simpleClusteredOption) {
