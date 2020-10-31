@@ -5,14 +5,32 @@ import org.opencv.core.Mat;
 import org.opencv.core.Rect;
 import org.opencv.core.Size;
 import org.opencv.imgcodecs.Imgcodecs;
+import picocli.CommandLine;
+
+import java.util.concurrent.Callable;
 
 import static org.opencv.core.Core.addWeighted;
 import static org.opencv.imgcodecs.Imgcodecs.*;
 import static org.opencv.imgproc.Imgproc.*;
 
-public class Watermak {
+@CommandLine.Command(
+        name = "watermark.sh",
+        mixinStandardHelpOptions = true,
+        version = "1.0",
+        description = "Simple program to put watermark into image"
+)
+public class Watermak implements Callable<Integer> {
 
-    private static Mat addWatermarkToImage(Mat image, Mat watermark) {
+    @CommandLine.Option(names = {"-i", "--input"}, required = true, paramLabel = "PATH", description = "path to input image - to put image in")
+    String imagePath;
+
+    @CommandLine.Option(names = {"-o", "--output"}, required = true, paramLabel = "PATH", description = "path to output image")
+    String outputImagePath;
+
+    @CommandLine.Option(names = {"-w", "--watermark"}, required = true, paramLabel = "PATH", description = "path to watermark image")
+    String watermarkPath;
+
+    private Mat addWatermarkToImage(Mat image, Mat watermark) {
         Size inSize = image.size();
         Size outSize = new Size(inSize.width/2.5, inSize.height/2.5);
 
@@ -34,44 +52,18 @@ public class Watermak {
         return result;
     }
 
-    private static void performAction(String imagePath, String watermarkPath, String outputImagePath) {
+    @Override
+    public Integer call() throws Exception {
         Mat image = Imgcodecs.imread(imagePath, IMREAD_COLOR);
         Mat watermark = imread(watermarkPath, IMREAD_UNCHANGED);
         imwrite(outputImagePath, addWatermarkToImage(image, watermark));
+        return 0;
     }
 
     public static void main(String[] args) {
         nu.pattern.OpenCV.loadLocally();
 
-//        Options options = new Options();
-//
-//        Option input = new Option("i", "input", true, "path to input image");
-//        input.setRequired(true);
-//        options.addOption(input);
-//
-//        Option output = new Option("o", "output", true, "path to outpur image");
-//        output.setRequired(true);
-//        options.addOption(output);
-//
-//        Option watermark = new Option("w", "watermark", true, "path to watermark image");
-//        watermark.setRequired(true);
-//        options.addOption(watermark);
-//
-//        Option help = new Option("h", "help", false, "prints this message");
-//        options.addOption(help);
-//
-//
-//        CommandLineParser parser = new DefaultParser();
-//        HelpFormatter helpFormatter = new HelpFormatter();
-//        CommandLine cmd = null;
-//
-//        try {
-//            cmd = parser.parse(options, args);
-//        } catch (ParseException e) {
-//            System.out.println(e.getMessage());
-//            helpFormatter.printHelp("watermark.sh [OPTIONS]", options);
-//            System.exit(1);
-//        }
-//        performAction(cmd.getOptionValue("i"), cmd.getOptionValue("w"), cmd.getOptionValue("o"));
+        int exitCode = new CommandLine(new Watermak()).execute(args);
+        System.exit(exitCode);
     }
 }
